@@ -1,9 +1,25 @@
 <!-- A.1 
-1. La versión de TLS es * SSL connection using TLSv1.3 / AEAD-AES256-GCM-SHA384 / [blank] / UNDEF
+    1. La versión de TLS es * SSL connection using TLSv1.3 / AEAD-AES256-GCM-SHA384 / [blank] / UNDEF
 
-2. El código de status es < HTTP/2 200 
+    2. El código de status es < HTTP/2 200 
 
-3. < content-type: application/json; charset=utf-8 : Este header indica que la respuesta viene en formato json
-< server: cloudflare : Indica que la respuesta paso por el proxy de cloudflare
-< age: 5163 : Indica hace cuantos segundos la respuesta está guardada en caché 
+    3.  
+        < content-type: application/json; charset=utf-8 : Este header indica que la respuesta viene en formato json
+        < server: cloudflare : Indica que la respuesta paso por el proxy de cloudflare
+        < age: 5163 : Indica hace cuantos segundos la respuesta está guardada en caché 
+
+    A.2
+        1. El GET trajo 5 resultados 
+        2. curl -v "https://jsonplaceholder.typicode.com/comments?postId=1" El filtro tiene el parámetro postId=1 y el ? indica que se está pasando un parámetro de consulta a la URL.
+
+    A.3
+
+        1. {
+            "title": "My new post",
+            "body": "This is the content from a test post",
+            "userId": 1,
+            "id": 101
+           }%          
+           
+        2.  
  -->
