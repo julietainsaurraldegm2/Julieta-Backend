@@ -1,0 +1,42 @@
+<!-- A.1 
+    1. La versión de TLS es * SSL connection using TLSv1.3 / AEAD-AES256-GCM-SHA384 / [blank] / UNDEF
+
+    2. El código de status es < HTTP/2 200 
+
+    3.  
+        < content-type: application/json; charset=utf-8 : Este header indica que la respuesta viene en formato json
+        < server: cloudflare : Indica que la respuesta paso por el proxy de cloudflare
+        < age: 5163 : Indica hace cuantos segundos la respuesta está guardada en caché 
+
+    A.2
+        1. El GET trajo 5 resultados 
+        2. curl -v "https://jsonplaceholder.typicode.com/comments?postId=1" El filtro tiene el parámetro postId=1 y el ? indica que se está pasando un parámetro de consulta a la URL.
+
+    A.3
+
+        1. {
+            "title": "My new post",
+            "body": "This is the content from a test post",
+            "userId": 1,
+            "id": 101
+           }%          
+           
+        2.  La id que devuelve es 101 y devuelve eso la API por que aplica el post creado sobre los 100 que ya venian precargados 
+
+    A.4
+        1. La diferencia se basa en que PUT reemplaza todo el recurso y hay que enviar todos los atributos del mismo sino se pueden reestablecer valores de los no seleccionados 
+        mientras que PATCH modifica parcialmente el recurso y se pueden mandar solo los atributos a cambiar 
+
+        2. Si, aparece el titulo modificado y el resto del cuerpo como se mostraba originalmente 
+    
+    A.5
+        1. El codigo de status fue < HTTP/2 200 osea ok
+
+        2.El body de respuesta es {} vuelve vacio
+
+    A.6
+        1. El codigo de status es < HTTP/2 404 no se encontro el post
+
+        2.El body de respuesta volvio sin objetos {}
+        
+ -->
