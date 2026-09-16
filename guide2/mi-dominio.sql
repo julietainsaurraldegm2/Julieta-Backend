@@ -8,3 +8,4 @@ INSERT INTO movies (title, synopsis, release_year) VALUES
 ('Pulp Fiction', 'Intertwined stories of crime and redemption.', 1994),
 ('The Dark Knight', 'Batman faces chaos in Gotham with the Joker.', 2008),
 ('Interstellar', 'A team travels through space to save humanity.', 2014);
+SELECT title, release_year FROM movies ORDER BY release_year;
