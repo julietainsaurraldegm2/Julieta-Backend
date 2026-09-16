@@ -16,3 +16,23 @@ SELECT title, release_year FROM movies ORDER BY release_year; - Linea que devuel
 
 ('Pulp Fiction', 'Intertwined stories of crime and redemption.', 1994),  - Contenido de la sinopsis anteriormente
 UPDATE movies SET synopsis = '' WHERE id = 3; - Linea para cambiar la sinopsis de la pelicula seleccionada por id
+
+## Exercise 4
+
+INSERT INTO movies (title, synopsis, release_year) VALUES ('Dune', 'A young nobleman seeks vengeance and destiny on a desert planet.', 2021); - linea que agrega una nueva fila
+
+DELETE FROM movies WHERE id = 6; - linea para eliminar la pelicula agregada
+
+      title      | release_year 
+-----------------+--------------
+ Pulp Fiction    |         1994
+ The Matrix      |         1999
+ The Dark Knight |         2008
+ Inception       |         2010
+ Interstellar    |         2014
+ Dune            |         2021
+(6 rows)
+
+UPDATE 1
+DELETE 1
+- respuesta de la terminal

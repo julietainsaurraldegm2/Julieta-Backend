@@ -8,5 +8,7 @@ INSERT INTO movies (title, synopsis, release_year) VALUES
 ('Pulp Fiction', 'Intertwined stories of crime and redemption.', 1994),
 ('The Dark Knight', 'Batman faces chaos in Gotham with the Joker.', 2008),
 ('Interstellar', 'A team travels through space to save humanity.', 2014);
+INSERT INTO movies (title, synopsis, release_year) VALUES ('Dune', 'A young nobleman seeks vengeance and destiny on a desert planet.', 2021);
 SELECT title, release_year FROM movies ORDER BY release_year;
 UPDATE movies SET synopsis = '' WHERE id = 3;
+DELETE FROM movies WHERE id = 6;
