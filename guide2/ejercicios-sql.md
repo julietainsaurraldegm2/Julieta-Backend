@@ -36,3 +36,18 @@ DELETE FROM movies WHERE id = 6; - linea para eliminar la pelicula agregada
 UPDATE 1
 DELETE 1
 - respuesta de la terminal
+
+## Exercise 5
+
+SELECT m.title, m.release_year, g.name AS genre
+FROM movies m INNER JOIN genres g ON m.genres_id = g.id ORDER BY m.release_year; - linea del inner join agregando el genero de cada pelicula
+
+      title      | release_year |      genre      
+-----------------+--------------+-----------------
+ Pulp Fiction    |         1994 | Crime
+ The Matrix      |         1999 | Science Fiction
+ The Dark Knight |         2008 | Action
+ Inception       |         2010 | Science Fiction
+ Interstellar    |         2014 | Science Fiction
+(5 rows)
+- respuesta de la terminal
