@@ -46,7 +46,7 @@ app.get('/movies/:id', async (req, res) => {
   }
 });
 
-
+/*
 app.post('/genres', (req, res) => {
   const { name } = req.body;
   if (!name) return res.status(400).json({ error: 'name es requerido' });
@@ -55,7 +55,30 @@ app.post('/genres', (req, res) => {
   genres.push(newGenre);
   res.status(201).json(newGenre);
 });
+*/
+app.post('/movies', async (req, res) => {
+  const { title, synopsis, trailerUrl, releaseYear, genreId } = req.body;
 
+  if (!title) {
+    return res.status(400).json({ error: 'title es requerido' });
+  }
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO movies
+        (title, synopsis, trailer_url, release_year, genre_id)
+       VALUES
+        ($1, $2, $3, $4, $5)
+       RETURNING *`,
+      [title, synopsis, trailerUrl, releaseYear, genreId]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al crear la movie' });
+  }
+});
 // --- Movies (relacionadas a un genre) ---
 
 app.get('/movies', (req, res) => {
@@ -76,7 +99,7 @@ app.post('/movies', (req, res) => {
   movies.push(newMovie);
   res.status(201).json(newMovie);
 });
-
+/*
 app.put('/movies/:id', (req, res) => {
   const movie = movies.find((m) => m.id === Number(req.params.id));
   if (!movie) return res.status(404).json({ error: 'Movie no encontrada' });
@@ -89,13 +112,59 @@ app.put('/movies/:id', (req, res) => {
   if (genreId !== undefined) movie.genreId = genreId;
   res.json(movie);
 });
+*/
 
+app.put('/movies/:id', async (req, res) => {
+  const { title, synopsis, trailerUrl, releaseYear, genreId } = req.body;
+  const id = req.params.id;
+  try {
+    const result = await pool.query(
+      `UPDATE movies
+       SET title = $1,
+           synopsis = $2,
+           trailer_url = $3,
+           release_year = $4,
+           genre_id = $5
+       WHERE id = $6
+       RETURNING *`,
+      [title, synopsis, trailerUrl, releaseYear, genreId, id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Movie no encontrada' });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al actualizar la movie' });
+  }
+});
+/*
 app.delete('/movies/:id', (req, res) => {
   const index = movies.findIndex((m) => m.id === Number(req.params.id));
   if (index === -1) return res.status(404).json({ error: 'Movie no encontrada' });
 
   movies.splice(index, 1);
   res.status(204).send();
+});
+*/
+
+app.delete('/movies/:id', async (req, res) => {
+  const id = req.params.id;
+  try {
+    const result = await pool.query(
+      `DELETE FROM movies
+       WHERE id = $1
+       RETURNING *`,
+      [id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Movie no encontrada' });
+    }
+    res.status(204).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al eliminar la movie' });
+  }
 });
 
 app.listen(PORT, () => {
