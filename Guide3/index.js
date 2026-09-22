@@ -1,0 +1,129 @@
+const express = require('express');
+const { Pool } = require('pg');
+const pool = new Pool({database: 'postgres'});
+const app = express();
+const PORT = 3000;
+
+app.use(express.json());
+
+let genres = [
+  { id: 1, name: 'Action' },
+  { id: 2, name: 'Comedy' },
+];
+let nextGenreId = 3;
+
+let movies = [
+  { id: 1, title: 'Sample Movie', synopsis: 'Sample synopsis', trailerUrl: null, releaseYear: 2020, genreId: 1 },
+];
+let nextMovieId = 2;
+
+// --- Genres ---
+
+
+app.get('/movies/:id', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM movies WHERE id = $1', [req.params.id]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Movie no encontrada' });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al obtener la movie' });
+  }
+});
+
+
+app.post('/movies', async (req, res) => {
+  const { title, synopsis, trailerUrl, releaseYear, genreId } = req.body;
+
+  if (!title) {
+    return res.status(400).json({ error: 'title es requerido' });
+  }
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO movies
+        (title, synopsis, trailer_url, release_year, genre_id)
+       VALUES
+        ($1, $2, $3, $4, $5)
+       RETURNING *`,
+      [title, synopsis, trailerUrl, releaseYear, genreId]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al crear la movie' });
+  }
+});
+// --- Movies (relacionadas a un genre) ---
+
+app.get('/movies', (req, res) => {
+  res.json(movies);
+});
+
+app.get('/movies/:id', (req, res) => {
+  const movie = movies.find((m) => m.id === Number(req.params.id));
+  if (!movie) return res.status(404).json({ error: 'Movie no encontrada' });
+  res.json(movie);
+});
+
+app.post('/movies', (req, res) => {
+  const { title, synopsis, trailerUrl, releaseYear, genreId } = req.body;
+  if (!title) return res.status(400).json({ error: 'title es requerido' });
+
+  const newMovie = { id: nextMovieId++, title, synopsis, trailerUrl, releaseYear, genreId };
+  movies.push(newMovie);
+  res.status(201).json(newMovie);
+});
+
+
+app.put('/movies/:id', async (req, res) => {
+  const { title, synopsis, trailerUrl, releaseYear, genreId } = req.body;
+  const id = req.params.id;
+  try {
+    const result = await pool.query(
+      `UPDATE movies
+       SET title = $1,
+           synopsis = $2,
+           trailer_url = $3,
+           release_year = $4,
+           genre_id = $5
+       WHERE id = $6
+       RETURNING *`,
+      [title, synopsis, trailerUrl, releaseYear, genreId, id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Movie no encontrada' });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al actualizar la movie' });
+  }
+});
+
+
+app.delete('/movies/:id', async (req, res) => {
+  const id = req.params.id;
+  try {
+    const result = await pool.query(
+      `DELETE FROM movies
+       WHERE id = $1
+       RETURNING *`,
+      [id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Movie no encontrada' });
+    }
+    res.status(204).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al eliminar la movie' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`starter-api corriendo en http://localhost:${PORT}`);
+});
