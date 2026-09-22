@@ -19,19 +19,6 @@ let nextMovieId = 2;
 
 // --- Genres ---
 
-/*app.get('/genres', (req, res) => {
-  res.json(genres);
-});   Ruta reemplazada a logica SELECT*/
-
-/*app.get('/movies', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM movies');
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Error al obtener las movies' });
-  }
-});*/
 
 app.get('/movies/:id', async (req, res) => {
   try {
@@ -46,16 +33,7 @@ app.get('/movies/:id', async (req, res) => {
   }
 });
 
-/*
-app.post('/genres', (req, res) => {
-  const { name } = req.body;
-  if (!name) return res.status(400).json({ error: 'name es requerido' });
 
-  const newGenre = { id: nextGenreId++, name };
-  genres.push(newGenre);
-  res.status(201).json(newGenre);
-});
-*/
 app.post('/movies', async (req, res) => {
   const { title, synopsis, trailerUrl, releaseYear, genreId } = req.body;
 
@@ -99,20 +77,7 @@ app.post('/movies', (req, res) => {
   movies.push(newMovie);
   res.status(201).json(newMovie);
 });
-/*
-app.put('/movies/:id', (req, res) => {
-  const movie = movies.find((m) => m.id === Number(req.params.id));
-  if (!movie) return res.status(404).json({ error: 'Movie no encontrada' });
 
-  const { title, synopsis, trailerUrl, releaseYear, genreId } = req.body;
-  if (title !== undefined) movie.title = title;
-  if (synopsis !== undefined) movie.synopsis = synopsis;
-  if (trailerUrl !== undefined) movie.trailerUrl = trailerUrl;
-  if (releaseYear !== undefined) movie.releaseYear = releaseYear;
-  if (genreId !== undefined) movie.genreId = genreId;
-  res.json(movie);
-});
-*/
 
 app.put('/movies/:id', async (req, res) => {
   const { title, synopsis, trailerUrl, releaseYear, genreId } = req.body;
@@ -138,15 +103,7 @@ app.put('/movies/:id', async (req, res) => {
     res.status(500).json({ error: 'Error al actualizar la movie' });
   }
 });
-/*
-app.delete('/movies/:id', (req, res) => {
-  const index = movies.findIndex((m) => m.id === Number(req.params.id));
-  if (index === -1) return res.status(404).json({ error: 'Movie no encontrada' });
 
-  movies.splice(index, 1);
-  res.status(204).send();
-});
-*/
 
 app.delete('/movies/:id', async (req, res) => {
   const id = req.params.id;
